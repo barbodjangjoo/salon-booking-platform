@@ -21,8 +21,8 @@ def user_registration(request):
     }
 
     return Response({
-        'user': serializer.data
-        'token': tokens
+        'user': serializer.data,
+        'token': tokens,
         }, status=status.HTTP_201_CREATED)
 
 
