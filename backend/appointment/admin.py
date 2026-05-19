@@ -1,3 +1,17 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import models
+
+@admin.register(models.Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    resource_class = models.Appointment
+    fields = [
+        'id',
+        'customer',
+        'staff',
+        'service',
+        'date',
+        'start_time',
+        'end_time',
+        'status'
+    ]
