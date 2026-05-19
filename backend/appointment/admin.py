@@ -15,3 +15,5 @@ class AppointmentAdmin(admin.ModelAdmin):
         'end_time',
         'status'
     ]
+    list_filter = ['status', 'date']
+    autocomplete_fields = ['customer', 'staff', 'service']
