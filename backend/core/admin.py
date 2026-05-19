@@ -12,3 +12,24 @@ class CustomUserAdmin(admin.ModelAdmin):
         'phone_number',
         'is_phone_verified'
     ]
+
+@admin.register(models.Services)
+class AdminServices(admin.ModelAdmin):
+    resource_class = models.Services
+    list_display = [
+        'id',
+        'title',
+        'requirement_time',
+        'duration',
+        'reserve_fee'
+    ]
+
+@admin.register(models.Staff)
+class StaffAdmin(admin.ModelAdmin):
+    resource_class = models.Staff
+    fields = [
+        'id',
+        'user__first_name',
+        'user__last_name',
+        'service'
+    ]
