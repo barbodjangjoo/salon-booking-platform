@@ -28,9 +28,7 @@ class AdminServices(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
     resource_class = models.Staff
     fields = [
-        'id',
-        'user__first_name',
-        'user__last_name',
+        'user',
         'service'
     ]
 
@@ -45,3 +43,5 @@ class AvailabilityAdmin(admin.ModelAdmin):
         'end_time',
         'is_active'
     ]
+    list_filter = ['date', 'is_active']
+    search_fields = ['staff__user__first_name']
