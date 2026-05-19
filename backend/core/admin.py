@@ -33,3 +33,15 @@ class StaffAdmin(admin.ModelAdmin):
         'user__last_name',
         'service'
     ]
+
+@admin.register(models.Availability)
+class AvailabilityAdmin(admin.ModelAdmin):
+    resource_class = models.Availability
+    fields = [
+        'id',
+        'staff',
+        'date',
+        'start_time',
+        'end_time',
+        'is_active'
+    ]
