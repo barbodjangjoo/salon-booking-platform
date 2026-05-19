@@ -30,7 +30,7 @@ class Services(models.Model):
 
 class Staff(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    service = models.ManyToManyField(Services, on_delete=models.CASCADE)
+    service = models.ManyToManyField(Services)
     min_gap_between_appointments = models.PositiveIntegerField(
         default=0,
         help_text='Gap between appointments in minutes'
