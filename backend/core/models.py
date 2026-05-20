@@ -19,9 +19,7 @@ class CustomUser(AbstractUser):
 class Services(models.Model):
     title = models.CharField(max_length=255)
     requirement_time = models.CharField(max_length=255)
-    duration = models.PositiveIntegerField(
-        help_text='Duration in minutes'
-    )
+    duration = models.PositiveIntegerField(help_text='Duration in minutes')
     svg = models.FileField(upload_to='service_svg/')
     reserve_fee = models.IntegerField()
 
