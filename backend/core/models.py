@@ -27,7 +27,7 @@ class Category(models.Model):
         return self.title
     
 class Services(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='sevices')
     title = models.CharField(max_length=255)
     requirement_time = models.CharField(max_length=255)
     duration = models.PositiveIntegerField(help_text='Duration in minutes')
