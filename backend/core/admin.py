@@ -45,3 +45,8 @@ class AvailabilityAdmin(admin.ModelAdmin):
     ]
     list_filter = ['date', 'is_active']
     search_fields = ['staff__user__first_name']
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    resource_class = models.Category
+    list_display = ['id', 'title']
