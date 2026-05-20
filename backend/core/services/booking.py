@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from appointment.models import Appointment
 
-def generate_available_slots(*,availablity, service):
+def generate_available_slots(availablity, service):
 
     slots = []
 
