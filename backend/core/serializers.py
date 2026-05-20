@@ -55,3 +55,23 @@ class CategorySerializer(serializers.ModelSerializer):
             'services'
         ]
 
+class ServiceSerializer(serializers.SerializerMethodField):
+    class Meta:
+        model = models.Service
+        fields = [
+            'id',
+            'title',
+            'duration',
+            'reserve_fee',
+            'svg',
+
+        ]
+
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Staff
+        fields = [
+            'id',
+            'user',
+            'service'
+        ]
