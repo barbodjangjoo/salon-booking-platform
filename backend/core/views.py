@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework import status
 from rest_framework.response import Response
@@ -31,3 +31,12 @@ def category_list_view(request):
     qs = models.Category.objects.prefetch_related('services').all()
     serializer = serializers.CategorySerializer(qs, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def services_detail_view(request, pk):
+    service = get_object_or_404(models.Service, pk=pk)
+    staff = models.Staff.objects.filter(service=service.id)
+    serializer = serializers.StaffSerializer(staff, many=True)
+
+    return Response(serializer.data)
+    
