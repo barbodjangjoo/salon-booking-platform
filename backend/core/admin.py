@@ -27,15 +27,16 @@ class AdminServices(admin.ModelAdmin):
 @admin.register(models.Staff)
 class StaffAdmin(admin.ModelAdmin):
     resource_class = models.Staff
-    fields = [
+    list_diplay = [
         'user',
-        'service'
+        'service',
+        'min_gap_between_appointments'
     ]
 
 @admin.register(models.Availability)
 class AvailabilityAdmin(admin.ModelAdmin):
     resource_class = models.Availability
-    fields = [
+    list_diplay = [
         'id',
         'staff',
         'date',
