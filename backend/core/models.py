@@ -16,7 +16,15 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
     
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+    svg = models.FileField(upload_to='category_svg/')
+    
+    def __str__(self):
+        return self.title
+    
 class Services(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
     requirement_time = models.CharField(max_length=255)
     duration = models.PositiveIntegerField(help_text='Duration in minutes')
