@@ -13,9 +13,9 @@ class CustomUserAdmin(admin.ModelAdmin):
         'is_phone_verified'
     ]
 
-@admin.register(models.Services)
+@admin.register(models.Service)
 class AdminServices(admin.ModelAdmin):
-    resource_class = models.Services
+    resource_class = models.Service
     list_display = [
         'id',
         'title',

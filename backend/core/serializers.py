@@ -34,7 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.Services
+        model = models.Service
 
         fields = [
             'id',

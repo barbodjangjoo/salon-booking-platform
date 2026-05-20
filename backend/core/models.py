@@ -26,7 +26,7 @@ class Category(models.Model):
     def __str__(self):
         return self.title
     
-class Services(models.Model):
+class Service(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='sevices')
     title = models.CharField(max_length=255)
     requirement_time = models.CharField(max_length=255)
@@ -39,7 +39,7 @@ class Services(models.Model):
 
 class Staff(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    service = models.ManyToManyField(Services)
+    service = models.ManyToManyField(Service)
     min_gap_between_appointments = models.PositiveIntegerField(
         default=0,
         help_text='Gap between appointments in minutes'
