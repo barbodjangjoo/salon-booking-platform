@@ -45,6 +45,8 @@ class Staff(models.Model):
         help_text='Gap between appointments in minutes'
     )
     
+    def __str__(self):
+        return f'{self.user.first_name}'
 
 class Availability(models.Model):
     staff = models.ForeignKey( Staff, on_delete=models.CASCADE, related_name='availabilities')
