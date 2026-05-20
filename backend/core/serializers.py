@@ -31,7 +31,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-class ServiceSerializer(serializers.ModelSerializer):
+class ServiceListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Service
@@ -45,7 +45,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
 class CategorySerializer(serializers.ModelSerializer):
-    services = ServiceSerializer(many=True, read_only=True)
+    services = ServiceListSerializer(many=True, read_only=True)
     class Meta:
         model = models.Category
         fields = [
@@ -54,3 +54,4 @@ class CategorySerializer(serializers.ModelSerializer):
             'svg',
             'services'
         ]
+
