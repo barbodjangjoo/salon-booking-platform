@@ -30,3 +30,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+class ServiceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Services
+
+        fields = [
+            'id',
+            'title',
+            'duration',
+            'reserve_fee',
+            'svg',
+        ]
+
+class CategorySerializer(serializers.ModelSerializer):
+    services = ServiceSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.Category
+        fields = [
+            'id',
+            'title',
+            'svg',
+            'services'
+        ]
