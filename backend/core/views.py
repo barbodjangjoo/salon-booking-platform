@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from . import serializers
+from . import models
 
 
 @api_view(['POST'])
@@ -25,5 +26,8 @@ def user_registration(request):
         'token': tokens,
         }, status=status.HTTP_201_CREATED)
 
-
-
+@api_view(['GET'])
+def category_list_view(request):
+    qs = models.Category.objects.prefetch_related('services').all()
+    serializer = serializers.CategorySerializer(qs, many=True)
+    return Response(serializer.data)
