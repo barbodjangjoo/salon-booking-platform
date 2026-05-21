@@ -35,8 +35,10 @@ def category_list_view(request):
 @api_view(['GET'])
 def services_detail_view(request, pk):
     service = get_object_or_404(models.Service, pk=pk)
-    staff = models.Staff.objects.filter(service=service.id)
+    staff = models.Staff.objects.filter(service=service.id).select_related('user')
     serializer = serializers.StaffSerializer(staff, many=True)
 
     return Response(serializer.data)
-    
+
+# @api_view(['GET'])
+# def avaiable_time(request, )
