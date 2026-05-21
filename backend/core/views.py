@@ -3,10 +3,12 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.timezone import now
 
 
 from . import serializers
 from . import models
+from .services.booking import generate_available_slots
 
 
 @api_view(['POST'])
@@ -40,5 +42,40 @@ def services_detail_view(request, pk):
 
     return Response(serializer.data)
 
-# @api_view(['GET'])
-# def avaiable_time(request, )
+@api_view(['GET'])
+def avaiable_slot_view(request, pk):
+    service = get_object_or_404(models.Service, pk=pk)
+
+    staff_id = request.GET.get('staff')
+
+    staff = get_object_or_404(models.Staff, pk=pk)
+
+    if not staff.service.filter(id=service.id).exists():
+        
+        return Response({
+            'detail': ('This staff does not provide this service!')
+        })
+    availabilities = (
+        models.Availability.objects.filter(
+            staff = staff,
+            is_activity = True,
+            date__gte = now().date()
+        ).order_by('date')
+    )
+
+    all_slot = []
+
+    for availability in availabilities:
+        slot = generate_available_slots(
+            availability=availability,
+            service=service
+        )
+
+        all_slot.append({
+            'date': availability.date,
+            'slots': slots
+        })
+    
+    serializer = serializers.AvailableSlotSerializer(all_slot, many=True)
+    return Response(serializer.data)
+
