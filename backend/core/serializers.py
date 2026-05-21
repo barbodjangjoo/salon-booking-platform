@@ -83,3 +83,7 @@ class SlotSerializer(serializers.Serializer):
     start_time = serializers.TimeField()
     end_time = serializers.TimeField()
     is_available = serializers.BooleanField()
+
+class AvailableSlotSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    slots = SlotSerializer(many=True)
