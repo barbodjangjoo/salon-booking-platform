@@ -32,7 +32,6 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'user',
-        # 'service',
         'min_gap_between_appointments'
     ]
     search_fields = ['user__first_name', 'user__last_name']
