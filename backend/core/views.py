@@ -44,38 +44,55 @@ def services_detail_view(request, pk):
 
 @api_view(['GET'])
 def avaiable_slot_view(request, pk):
-    service = get_object_or_404(models.Service, pk=pk)
+
+    service = get_object_or_404(
+        models.Service,
+        pk=pk
+    )
 
     staff_id = request.GET.get('staff')
 
-    staff = get_object_or_404(models.Staff, pk=pk)
+    staff = get_object_or_404(
+        models.Staff,
+        pk=staff_id
+    )
 
-    if not staff.service.filter(id=service.id).exists():
-        
+    if not staff.service.filter(
+        id=service.id
+    ).exists():
+
         return Response({
-            'detail': ('This staff does not provide this service!')
+            'detail': (
+                'This staff does not provide this service!'
+            )
         })
+
     availabilities = (
         models.Availability.objects.filter(
-            staff = staff,
-            is_activity = True,
-            date__gte = now().date()
+            staff=staff,
+            is_active=True,
+            date__gte=now().date()
         ).order_by('date')
     )
 
-    all_slot = []
+    all_slots = []
 
     for availability in availabilities:
-        slot = generate_available_slots(
+
+        slots = generate_available_slots(
             availability=availability,
             service=service
         )
 
-        all_slot.append({
+        all_slots.append({
             'date': availability.date,
             'slots': slots
         })
-    
-    serializer = serializers.AvailableSlotSerializer(all_slot, many=True)
+
+    serializer = serializers.AvailableSlotSerializer(
+        all_slots,
+        many=True
+    )
+
     return Response(serializer.data)
 
