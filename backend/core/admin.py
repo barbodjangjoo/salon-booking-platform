@@ -29,9 +29,10 @@ class AdminServices(admin.ModelAdmin):
 @admin.register(models.Staff)
 class StaffAdmin(admin.ModelAdmin):
     resource_class = models.Staff
-    list_diplay = [
+    list_display = [
+        'id',
         'user',
-        'service',
+        # 'service',
         'min_gap_between_appointments'
     ]
     search_fields = ['user__first_name', 'user__last_name']
