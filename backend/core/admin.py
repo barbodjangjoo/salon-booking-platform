@@ -12,6 +12,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         'phone_number',
         'is_phone_verified'
     ]
+    search_fields = ['first_name', 'last_name', 'phone_number']
 
 @admin.register(models.Service)
 class AdminServices(admin.ModelAdmin):
@@ -23,6 +24,7 @@ class AdminServices(admin.ModelAdmin):
         'duration',
         'reserve_fee'
     ]
+    search_fields = ['title']
 
 @admin.register(models.Staff)
 class StaffAdmin(admin.ModelAdmin):
@@ -32,6 +34,7 @@ class StaffAdmin(admin.ModelAdmin):
         'service',
         'min_gap_between_appointments'
     ]
+    search_fields = ['user__first_name', 'user__last_name']
 
 @admin.register(models.Availability)
 class AvailabilityAdmin(admin.ModelAdmin):
