@@ -1,6 +1,6 @@
 from django.db import models
 
-from core import models
+from core import models as coremodel
 class Appointment(models.Model):
 
     STATUS_CHOICES = (
@@ -10,11 +10,11 @@ class Appointment(models.Model):
         ('completed', 'Completed'),
     )
 
-    customer = models.ForeignKey(models.CustomUser, on_delete=models.CASCADE, related_name='appointments')
+    customer = models.ForeignKey(coremodel.CustomUser, on_delete=models.CASCADE, related_name='appointments')
 
-    staff = models.ForeignKey(models.Staff, on_delete=models.CASCADE, related_name='appointments')
+    staff = models.ForeignKey(coremodel.Staff, on_delete=models.CASCADE, related_name='appointments')
 
-    service = models.ForeignKey(models.Service, on_delete=models.CASCADE)
+    service = models.ForeignKey(coremodel.Service, on_delete=models.CASCADE)
 
     date = models.DateField()
 
