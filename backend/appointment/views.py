@@ -7,10 +7,10 @@ from rest_framework import status
 from . import models
 from . import serializers
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_appointment_view(request):
-    serializer = serializers.AppointmentSerializers(data=request.data)
+    serializer = serializers.AppointmentSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     appointment = serializer.save(customer=request.user)
 
