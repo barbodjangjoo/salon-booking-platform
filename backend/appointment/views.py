@@ -24,9 +24,10 @@ def create_appointment_view(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def appointment_view(request):
+def appointment_list_view(request):
     qs = models.Appointment.objects.filter(customer = request.user).all()
 
     serializer = serializers.AppointmentListView(qs, many=True)
 
     return Response(serializer.data)
+
