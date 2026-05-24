@@ -31,12 +31,31 @@ def appointment_list_view(request):
 
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def appointment_detail_view(request, pk):
-    appointment = get_object_or_404(models.Appointment, pk=pk)
-    serializer = serializers.AppointmentListView(appointment)
+    appointment = get_object_or_404(
+        models.Appointment, 
+        pk=pk,
+        customer = request.user
+        )
+    if request.method == 'GET':
+        serializer = serializers.AppointmentListView(appointment)
+
+    # elif request.method == 'PATCH':
+    #     serializer = serializers.AppointmentSerializer(appointment, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+
+    #     return Response(serializer.data)
+    
+    elif request.method == 'DELETE':
+        appointment.status = 'cancelled'
+        appointment.save()
+        return Response(
+            {
+                'detail': 'Your appointment has been canceled'
+            }
+        )
 
     return Response(serializer.data)
-    
-
