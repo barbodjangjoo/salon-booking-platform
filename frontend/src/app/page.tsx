@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/navbar";
 import HeroSection from "@/components/hero/hero-section";
+import ServicesSection from "@/components/services/services-section";
 
 export default function HomePage() {
   return (
@@ -7,6 +8,7 @@ export default function HomePage() {
       <Navbar />
 
       <HeroSection />
+      <ServicesSection />
     </main>
   );
 }
