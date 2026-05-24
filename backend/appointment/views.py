@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -30,4 +30,13 @@ def appointment_list_view(request):
     serializer = serializers.AppointmentListView(qs, many=True)
 
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def appointment_detail_view(request, pk):
+    appointment = get_object_or_404(models.Appointment, pk=pk)
+    serializer = serializers.AppointmentListView(appointment)
+
+    return Response(serializer.data)
+    
 
