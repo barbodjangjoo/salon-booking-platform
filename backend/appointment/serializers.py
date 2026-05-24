@@ -2,9 +2,9 @@ from rest_framework import serializers
 
 from . import models
 
-class AppointmentSerializers(serializers.ModelSerializer):
+class AppointmentSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
-    end_time = serializers.DateField(read_only=True)
+    end_time = serializers.TimeField(read_only=True)
     class Meta:
         model = models.Appointment
         fields = [
