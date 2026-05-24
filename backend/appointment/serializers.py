@@ -85,3 +85,17 @@ class AppointmentSerializer(serializers.ModelSerializer):
         attrs['end_time'] = end_datetime.time()
 
         return attrs
+    
+class AppointmentListView(serializers.ModelSerializer):
+    class Meta:
+        model = models.Appointment
+        fields = [
+            'id',
+            'customer',
+            'staff',
+            'service',
+            'date',
+            'start_time',
+            'end_time',
+            'status'
+        ]
