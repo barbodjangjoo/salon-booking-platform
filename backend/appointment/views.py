@@ -21,3 +21,12 @@ def create_appointment_view(request):
     },
     status=status.HTTP_200_OK
     )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def appointment_view(request):
+    qs = models.Appointment.objects.filter(customer = request.user).all()
+
+    serializer = serializers.AppointmentListView(qs, many=True)
+
+    return Response(serializer.data)
