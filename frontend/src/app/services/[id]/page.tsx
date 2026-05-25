@@ -1,102 +1,44 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getAvailableSlots } from "@/lib/api/booking";
+import { getServiceDetail } from "@/lib/api/services"
 
-const mockService = {
-  id: 1,
-  title: "کوتاهی مو حرفه‌ای",
-  description: "خدمات حرفه‌ای با استایل مدرن و متناسب با فرم صورت",
-};
+export default function ServiceDetailPage({ params }: any) {
+  const [service, setService] = useState<any>(null);
+  const [staffId, setStaffId] = useState<number | null>(null);
+  const [slots, setSlots] = useState<any[]>([]);
 
-const mockStaff = [
-  { id: 1, name: "آرایشگر ۱" },
-  { id: 2, name: "آرایشگر ۲" },
-];
+  useEffect(() => {
+    const load = async () => {
+      const data = await getServiceDetail(params.id);
+      setService(data);
+    };
 
-const mockSlots = [
-  "09:00",
-  "10:30",
-  "12:00",
-  "14:00",
-  "16:00",
-];
+    load();
+  }, [params.id]);
 
-export default function ServiceDetailPage() {
-  const [selectedStaff, setSelectedStaff] = useState<number | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  useEffect(() => {
+    if (!staffId) return;
+
+    const loadSlots = async () => {
+      const data = await getAvailableSlots(params.id, staffId);
+      setSlots(data);
+    };
+
+    loadSlots();
+  }, [staffId]);
 
   return (
     <main className="min-h-screen bg-[#0B0B0B] text-white px-6 py-32">
-      <div className="mx-auto max-w-5xl">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <p className="text-sm tracking-[0.3em] text-[#D4B483]">
-            رزرو خدمات
-          </p>
+      <h1 className="text-4xl">{service?.title}</h1>
 
-          <h1 className="mt-4 text-5xl font-semibold">
-            {mockService.title}
-          </h1>
+      <div className="mt-10">
+        <p className="text-zinc-400">
+          انتخاب آرایشگر و زمان از API واقعی
+        </p>
 
-          <p className="mt-6 text-zinc-400">
-            {mockService.description}
-          </p>
-        </div>
-
-        {/* Staff Selection */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-xl font-medium">انتخاب آرایشگر</h2>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {mockStaff.map((staff) => (
-              <motion.button
-                key={staff.id}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedStaff(staff.id)}
-                className={`rounded-2xl border p-6 text-right transition ${
-                  selectedStaff === staff.id
-                    ? "border-[#D4B483] bg-[#D4B483]/10"
-                    : "border-white/10 bg-white/5"
-                }`}
-              >
-                {staff.name}
-              </motion.button>
-            ))}
-          </div>
-        </section>
-
-        {/* Slot Selection */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-xl font-medium">انتخاب زمان</h2>
-
-          <div className="grid grid-cols-3 gap-4 md:grid-cols-5">
-            {mockSlots.map((slot) => (
-              <motion.button
-                key={slot}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedSlot(slot)}
-                className={`rounded-xl border py-3 text-sm transition ${
-                  selectedSlot === slot
-                    ? "border-[#D4B483] bg-[#D4B483]/10 text-[#D4B483]"
-                    : "border-white/10 bg-white/5 text-white"
-                }`}
-              >
-                {slot}
-              </motion.button>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <div className="flex justify-center">
-          <button
-            disabled={!selectedStaff || !selectedSlot}
-            className="rounded-full bg-[#D4B483] px-10 py-4 text-sm font-medium text-black disabled:opacity-40"
-          >
-            تایید و رزرو نوبت
-          </button>
-        </div>
+        {/* later UI */}
       </div>
     </main>
   );
