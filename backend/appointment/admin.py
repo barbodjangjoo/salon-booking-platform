@@ -6,7 +6,6 @@ from . import models
 class AppointmentAdmin(admin.ModelAdmin):
     resource_class = models.Appointment
     fields = [
-        'id',
         'customer',
         'staff',
         'service',
