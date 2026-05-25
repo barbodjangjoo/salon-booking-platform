@@ -19,7 +19,7 @@ export default function Navbar() {
 
         <nav className="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
           <a
-            href="#"
+            href="/services"
             className="transition hover:text-white"
           >
             خدمات
