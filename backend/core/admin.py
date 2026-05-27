@@ -1,7 +1,8 @@
 from django.contrib import admin
+from django_jalali.admin.widgets import AdminjDateWidget
+
 
 from . import models
-
 @admin.register(models.CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     resource_class = models.CustomUser
@@ -37,9 +38,12 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ['user__first_name', 'user__last_name']
 
 @admin.register(models.Availability)
-class AvailabilityAdmin(admin.ModelAdmin):
+class AvailabilityAdmin(
+    admin.ModelAdmin
+):
     resource_class = models.Availability
-    list_diplay = [
+
+    list_display = [
         'id',
         'staff',
         'date',
@@ -47,9 +51,15 @@ class AvailabilityAdmin(admin.ModelAdmin):
         'end_time',
         'is_active'
     ]
-    list_filter = ['date', 'is_active']
-    search_fields = ['staff__user__first_name']
 
+    list_filter = [
+        ('date'),
+        'is_active'
+    ]
+
+    search_fields = [
+        'staff__user__first_name'
+    ]
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     resource_class = models.Category

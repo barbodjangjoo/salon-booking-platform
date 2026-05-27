@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django_jalali.db import models as jmodels
 
 class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=255)
@@ -51,7 +51,7 @@ class Staff(models.Model):
 class Availability(models.Model):
     staff = models.ForeignKey( Staff, on_delete=models.CASCADE, related_name='availabilities')
 
-    date = models.DateField()
+    date = jmodels.jDateField()
 
     start_time = models.TimeField()
     end_time = models.TimeField()
