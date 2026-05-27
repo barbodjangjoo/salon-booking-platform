@@ -36,7 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     'rest_framework_simplejwt',
-    "corsheaders",
-    'jalali_date',
+    "django_jalali",
     'core',
     'appointment'
 ]
@@ -151,9 +150,9 @@ SIMPLE_JWT = {
 }
 
 # JAZZMIN SETTING
-JAZZMIN_SETTINGS = {
-    'site_title': "Beauty Salon"
-}
+# JAZZMIN_SETTINGS = {
+#     'site_title': "Beauty Salon"
+# }
 
 # CORS SETTING
 
