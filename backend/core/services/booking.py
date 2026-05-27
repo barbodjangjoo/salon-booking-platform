@@ -18,19 +18,23 @@ def generate_available_slots(
         .min_gap_between_appointments
     )
 
+    # تبدیل تاریخ جلالی به میلادی
+    gregorian_date = availability.date.togregorian()
+
     current_datetime = datetime.combine(
-        availability.date,
+        gregorian_date,
         availability.start_time
     )
 
     end_datetime = datetime.combine(
-        availability.date,
+        gregorian_date,
         availability.end_time
     )
 
+    # گرفتن رزروهای ثبت‌شده
     reserved_appointments = Appointment.objects.filter(
         staff=availability.staff,
-        date=availability.date,
+        date=gregorian_date,
         status__in=[
             'pending',
             'confirmed'
@@ -44,14 +48,17 @@ def generate_available_slots(
             timedelta(minutes=service_duration)
         )
 
+        # اگر از ساعت کاری رد شد
         if slot_end_datetime > end_datetime:
             break
 
+        # چک رزرو بودن
         is_reserved = reserved_appointments.filter(
             start_time=current_datetime.time()
         ).exists()
 
         slots.append({
+            'date': str(availability.date),  # جلالی برای فرانت
             'start_time': current_datetime.time(),
             'end_time': slot_end_datetime.time(),
             'is_available': not is_reserved
