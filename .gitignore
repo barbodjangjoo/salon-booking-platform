@@ -3,3 +3,4 @@ backend/.env
 db.sqlite3
 __pycache__/
 .env.local
+.DS_STORE
