@@ -1,27 +1,37 @@
-export const saveTokens = (
-  access: string,
-  refresh: string
+// lib/api/auth.ts
+
+import api from "./client";
+
+export const login = async (
+  username: string,
+  password: string
 ) => {
-  localStorage.setItem("access_token", access);
-  localStorage.setItem("refresh_token", refresh);
+  const res = await api.post(
+    "/core/token/",
+    {
+      username,
+      password,
+    }
+  );
+
+  return res.data;
 };
 
-export const isAuthenticated = () => {
-  if (typeof window === "undefined") {
-    return false;
+export const register = async (
+  data: {
+    first_name: string;
+    last_name: string;
+    phone_number: string;
+    username: string;
+    email: string;
+    password: string;
+    password2: string;
   }
-
-  return !!localStorage.getItem(
-    "access_token"
-  );
-};
-
-export const logout = () => {
-  localStorage.removeItem(
-    "access_token"
+) => {
+  const res = await api.post(
+    "/core/registration/",
+    data
   );
 
-  localStorage.removeItem(
-    "refresh_token"
-  );
+  return res.data;
 };
