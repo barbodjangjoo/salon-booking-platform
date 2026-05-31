@@ -1,20 +1,25 @@
+
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  withCredentials: true,
+  baseURL:
+    process.env.NEXT_PUBLIC_API_URL,
 });
 
-api.interceptors.request.use((config) => {
-  const token = typeof window !== "undefined"
-    ? localStorage.getItem("access_token")
-    : null;
+api.interceptors.request.use(
+  (config) => {
+    const token =
+      localStorage.getItem(
+        "access_token"
+      );
 
-  if (token) {
-    config.headers.Authorization = `JWT ${token}`;
+    if (token) {
+      config.headers.Authorization =
+        `Bearer ${token}`;
+    }
+
+    return config;
   }
-
-  return config;
-});
+);
 
 export default api;
