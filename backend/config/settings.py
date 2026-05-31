@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -198,3 +198,7 @@ CORS_ALLOW_CREDENTIALS = True
 REDIS_URL='redis://localhost:6379/0'
 CELERY_BROKER_URL = "redis://redis:6379/1"
 CELERY_RESULT_BACKEND = "redis://redis:6379/2"
+
+# OTP settings
+OTP_SMS_API_KEY = env('OTP_SMS_API_KEY')
+OTP_SMS_TEMPLATE_ID = env('OTP_SMS_TEMPLATE_ID')
