@@ -1,3 +1,5 @@
+// lib/api/booking.ts
+
 import api from "./client";
 
 export const getAvailableSlots = async (
@@ -12,7 +14,12 @@ export const getAvailableSlots = async (
 };
 
 export const createAppointment = async (
-  data: any
+  data: {
+    staff: number;
+    service: number;
+    date: string;
+    start_time: string;
+  }
 ) => {
   const res = await api.post(
     "/appointment/booking/",
@@ -21,3 +28,21 @@ export const createAppointment = async (
 
   return res.data;
 };
+
+export const getAppointments =
+  async () => {
+    const res = await api.get(
+      "/appointment/"
+    );
+
+    return res.data;
+  };
+
+export const cancelAppointment =
+  async (id: number) => {
+    const res = await api.delete(
+      `/appointment/${id}/`
+    );
+
+    return res.data;
+  };
