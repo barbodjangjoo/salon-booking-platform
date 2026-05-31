@@ -15,7 +15,7 @@ export const createAppointment = async (
   data: any
 ) => {
   const res = await api.post(
-    "/appointment/create/",
+    "/appointment/booking/",
     data
   );
 
