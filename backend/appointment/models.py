@@ -14,7 +14,7 @@ class Slot(models.Model):
     date = jmodels.jDateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    status = models.CharField(choices=STATUS_CHOICES, max_length=7)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=9)
 
     class Meta:
         constraints = [
