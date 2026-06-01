@@ -1,17 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django_jalali.db import models as jmodels
-
+from django.utils.translation import gettext as _
 class CustomUser(AbstractUser):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(_('first_name'),max_length=255)
+    last_name = models.CharField(_('last_name'),max_length=255)
 
-    phone_number = models.CharField(max_length=12, unique=True)
-    email = models.EmailField(blank=True, null=True)
-    is_phone_verified = models.BooleanField(default=False)
+    phone_number = models.CharField(_('phone_number'),max_length=12, unique=True)
+    email = models.EmailField(_('email'),blank=True, null=True)
 
-    datetime_created = models.DateTimeField(auto_now_add=True)
-    datetime_modified = models.DateTimeField(auto_now=True)
+    datetime_created = models.DateTimeField(_('datetime_created'),auto_now_add=True)
+    datetime_modified = models.DateTimeField(_('datetime_modified'),auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
@@ -20,8 +19,7 @@ class CustomUser(AbstractUser):
         return f'{self.first_name} - {self.last_name}'
     
 class Category(models.Model):
-    title = models.CharField(max_length=255)
-    svg = models.FileField(upload_to='category_svg/', blank=True, null=True)
+    title = models.CharField(_('title'),max_length=255)
     
     def __str__(self):
         return self.title
@@ -29,9 +27,7 @@ class Category(models.Model):
 class Service(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='services')
     title = models.CharField(max_length=255)
-    requirement_time = models.CharField(max_length=255)
     duration = models.PositiveIntegerField(help_text='Duration in minutes')
-    svg = models.FileField(upload_to='service_svg/', blank=True, null=True)
     reserve_fee = models.IntegerField()
 
     def __str__(self):
