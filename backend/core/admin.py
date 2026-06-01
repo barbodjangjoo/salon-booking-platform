@@ -3,6 +3,12 @@ from django_jalali.admin.widgets import AdminjDateWidget
 
 
 from . import models
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    resource_class = models.Category
+    list_display = ['id', 'title']
+
+
 @admin.register(models.CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     resource_class = models.CustomUser
@@ -21,7 +27,6 @@ class AdminServices(admin.ModelAdmin):
     list_display = [
         'id',
         'title',
-        'requirement_time',
         'duration',
         'reserve_fee'
     ]
@@ -33,16 +38,14 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'user',
+        'service',
         'min_gap_between_appointments'
     ]
     search_fields = ['user__first_name', 'user__last_name']
 
 @admin.register(models.Availability)
-class AvailabilityAdmin(
-    admin.ModelAdmin
-):
+class AvailabilityAdmin(admin.ModelAdmin):
     resource_class = models.Availability
-
     list_display = [
         'id',
         'staff',
@@ -60,7 +63,3 @@ class AvailabilityAdmin(
     search_fields = [
         'staff__user__first_name'
     ]
-@admin.register(models.Category)
-class CategoryAdmin(admin.ModelAdmin):
-    resource_class = models.Category
-    list_display = ['id', 'title']
