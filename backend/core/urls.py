@@ -13,6 +13,6 @@ urlpatterns = [
     
     path('categories/', views.category_list_view, name='category_list'),
     path('service/<int:pk>/', views.services_detail_view, name='service_detail'),
-    path('services/<int:pk>/slots/',  views.avaiable_slot_view, name='available_slots'),
+    path('service/<int:pk>/slots/',  views.avaiable_slot_view, name='available_slots'),
     
 ]
