@@ -5,9 +5,9 @@ from core import models as coremodel
 
 class Slot(models.Model):
     STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('cancel', 'Cancel'),
-        ('confirm', 'Confirm')
+        ('available', 'Available'),
+        ('reserved', 'Reserved'),
+        ('blocked', 'Blocked')
     )
     staff = models.ForeignKey(coremodel.Staff, on_delete=models.CASCADE)
     availability = models.ForeignKey(coremodel.Availability, on_delete=models.CASCADE, related_name='slots')
