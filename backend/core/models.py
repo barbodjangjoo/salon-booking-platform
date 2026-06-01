@@ -42,7 +42,7 @@ class Staff(models.Model):
     )
     
     def __str__(self):
-        return f'{self.user.first_name}'
+        return f'{self.user.first_name} - {self.user.last_name}: {self.service.title}'
 
 class Availability(models.Model):
     staff = models.ForeignKey( Staff, on_delete=models.CASCADE, related_name='availabilities')
