@@ -17,7 +17,6 @@ class CustomUserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'phone_number',
-        'is_phone_verified'
     ]
     search_fields = ['first_name', 'last_name', 'phone_number']
 
@@ -38,7 +37,6 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'user',
-        'service',
         'min_gap_between_appointments'
     ]
     search_fields = ['user__first_name', 'user__last_name']
