@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django_jalali.db import models as jmodels
 from django.utils.translation import gettext as _
 class CustomUser(AbstractUser):
     first_name = models.CharField(_('first_name'),max_length=255)
@@ -18,41 +17,3 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
     
-class Category(models.Model):
-    title = models.CharField(_('title'),max_length=255)
-    
-    def __str__(self):
-        return self.title
-    
-class Service(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='services')
-    title = models.CharField(max_length=255)
-    duration = models.PositiveIntegerField(help_text='Duration in minutes')
-    reserve_fee = models.IntegerField()
-
-    def __str__(self):
-        return self.title
-
-class Staff(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    service = models.ManyToManyField(Service, related_name='staff')
-    min_gap_between_appointments = models.PositiveIntegerField(
-        default=0,
-        help_text='Gap between appointments in minutes'
-    )
-    
-    def __str__(self):
-        return f'{self.user.first_name} - {self.user.last_name}'
-
-class Availability(models.Model):
-    staff = models.ForeignKey( Staff, on_delete=models.CASCADE, related_name='availabilities')
-
-    date = jmodels.jDateField()
-
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f'{self.staff} - {self.date}'
