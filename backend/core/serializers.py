@@ -41,7 +41,6 @@ class ServiceListSerializer(serializers.ModelSerializer):
             'title',
             'duration',
             'reserve_fee',
-            'svg',
         ]
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -51,21 +50,9 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
-            'svg',
             'services'
         ]
 
-class ServiceSerializer(serializers.SerializerMethodField):
-    class Meta:
-        model = models.Service
-        fields = [
-            'id',
-            'title',
-            'duration',
-            'reserve_fee',
-            'svg',
-
-        ]
 
 class StaffSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
@@ -78,12 +65,14 @@ class StaffSerializer(serializers.ModelSerializer):
             'last_name',
             'service'
         ]
-
-class SlotSerializer(serializers.Serializer):
-    start_time = serializers.TimeField()
-    end_time = serializers.TimeField()
-    is_available = serializers.BooleanField()
-
-class AvailableSlotSerializer(serializers.Serializer):
-    date = serializers.DateField()
-    slots = SlotSerializer(many=True)
+class ServiceSerializer(serializers.SerializerMethodField):
+    staff = StaffSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.Service
+        fields = [
+            'id',
+            'title',
+            'duration',
+            'reserve_fee',
+            'staff',
+        ]
