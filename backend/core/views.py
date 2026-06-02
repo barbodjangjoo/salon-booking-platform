@@ -11,7 +11,7 @@ from . import models
 from .services.booking import generate_available_slots
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def user_registration(request):
     serializer = serializers.RegisterSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -19,80 +19,105 @@ def user_registration(request):
 
     refresh = RefreshToken.for_user(user)
     tokens = {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
     }
 
-    return Response({
-        'user': serializer.data,
-        'token': tokens,
-        }, status=status.HTTP_201_CREATED)
+    return Response(
+        {
+            "user": serializer.data,
+            "token": tokens,
+        },
+        status=status.HTTP_201_CREATED,
+    )
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def category_list_view(request):
-    qs = models.Category.objects.prefetch_related('services').all()
+    qs = models.Category.objects.all()
     serializer = serializers.CategorySerializer(qs, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def services_detail_view(request, pk):
-    service = get_object_or_404(models.Service, pk=pk)
-    staff = models.Staff.objects.filter(service=service.id).select_related('user')
-    serializer = serializers.StaffSerializer(staff, many=True)
 
+@api_view(["GET"])
+def category_detail_view(request, pk):
+    category = get_object_or_404(models.Category, pk=pk)
+    serializer = serializers.CategorySerializer(category)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def avaiable_slot_view(request, pk):
 
+@api_view(["GET"])
+def service_list_view(request, pk):
     service = get_object_or_404(
-        models.Service,
-        pk=pk
-    )
+        models.Service.objects.prefetch_related('staff'), 
+        pk=pk)
+    serializer = serializers.ServiceSerializer
 
-    staff_id = request.GET.get('staff')
 
-    staff = get_object_or_404(
-        models.Staff,
-        pk=staff_id
-    )
+# @api_view(['GET'])
+# def category_list_view(request):
+#     qs = models.Category.objects.prefetch_related('services').all()
+#     serializer = serializers.CategorySerializer(qs, many=True)
+#     return Response(serializer.data)
 
-    if not staff.service.filter(
-        id=service.id
-    ).exists():
+# @api_view(['GET'])
+# def services_detail_view(request, pk):
+#     service = get_object_or_404(models.Service, pk=pk)
+#     staff = models.Staff.objects.filter(service=service.id).select_related('user')
+#     serializer = serializers.StaffSerializer(staff, many=True)
 
-        return Response({
-            'detail': (
-                'This staff does not provide this service!'
-            )
-        })
+#     return Response(serializer.data)
 
-    availabilities = (
-        models.Availability.objects.filter(
-            staff=staff,
-            is_active=True,
-            date__gte=now().date()
-        ).order_by('date')
-    )
+# @api_view(['GET'])
+# def avaiable_slot_view(request, pk):
 
-    all_slots = []
+#     service = get_object_or_404(
+#         models.Service,
+#         pk=pk
+#     )
 
-    for availability in availabilities:
+#     staff_id = request.GET.get('staff')
 
-        slots = generate_available_slots(
-            availability=availability,
-            service=service
-        )
+#     staff = get_object_or_404(
+#         models.Staff,
+#         pk=staff_id
+#     )
 
-        all_slots.append({
-            'date': availability.date,
-            'slots': slots
-        })
+#     if not staff.service.filter(
+#         id=service.id
+#     ).exists():
 
-    serializer = serializers.AvailableSlotSerializer(
-        all_slots,
-        many=True
-    )
+#         return Response({
+#             'detail': (
+#                 'This staff does not provide this service!'
+#             )
+#         })
 
-    return Response(serializer.data)
+#     availabilities = (
+#         models.Availability.objects.filter(
+#             staff=staff,
+#             is_active=True,
+#             date__gte=now().date()
+#         ).order_by('date')
+#     )
 
+#     all_slots = []
+
+#     for availability in availabilities:
+
+#         slots = generate_available_slots(
+#             availability=availability,
+#             service=service
+#         )
+
+#         all_slots.append({
+#             'date': availability.date,
+#             'slots': slots
+#         })
+
+#     serializer = serializers.AvailableSlotSerializer(
+#         all_slots,
+#         many=True
+#     )
+
+#     return Response(serializer.data)
