@@ -5,15 +5,13 @@ from . import models
 @admin.register(models.Slot)
 class SlotAdmin(admin.ModelAdmin):
     resource_class = models.Slot
-    fields = [
-        'id',
-        'staff',
-        'availability',
-        'date',
-        'start_time',
-        'end_time',
-        'status',
-    ]
+    list_display = (
+        "staff",
+        "date",
+        "start_time",
+        "end_time",
+        "status",
+    )
 
 @admin.register(models.Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
