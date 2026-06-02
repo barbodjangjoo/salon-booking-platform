@@ -1,35 +1,45 @@
 from django.db import models
 from django_jalali.db import models as jmodels
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
+
 
 class Category(models.Model):
-    title = models.CharField(_('title'),max_length=255)
-    
+    title = models.CharField(_("title"), max_length=255)
+
     def __str__(self):
         return self.title
-    
+
+
 class Service(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='services')
+    category = models.ForeignKey(
+        Category, on_delete=models.PROTECT, related_name="services"
+    )
     title = models.CharField(max_length=255)
-    duration = models.PositiveIntegerField(help_text='Duration in minutes')
+    duration = models.PositiveIntegerField(help_text="Duration in minutes")
     reserve_fee = models.IntegerField()
 
     def __str__(self):
         return self.title
 
+
 class Staff(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, null=True)
-    service = models.ManyToManyField(Service, related_name='staff')
-    min_gap_between_appointments = models.PositiveIntegerField(
-        default=0,
-        help_text='Gap between appointments in minutes'
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
-    
+    service = models.ManyToManyField(Service, related_name="staff")
+    min_gap_between_appointments = models.PositiveIntegerField(
+        default=0, help_text="Gap between appointments in minutes"
+    )
+
     def __str__(self):
-        return f'{self.user.first_name} - {self.user.last_name}'
+        return f"{self.user.first_name} - {self.user.last_name}"
+
 
 class Availability(models.Model):
-    staff = models.ForeignKey( Staff, on_delete=models.CASCADE, related_name='availabilities')
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="availabilities"
+    )
 
     date = jmodels.jDateField()
 
@@ -39,8 +49,7 @@ class Availability(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.staff} - {self.date}'
-
+        return f"{self.staff} - {self.date}"
 
 
 class Slot(models.Model):
@@ -50,7 +59,9 @@ class Slot(models.Model):
         ("blocked", "Blocked"),
     )
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    availability = models.ForeignKey(Availability, on_delete=models.CASCADE, related_name="slots")
+    availability = models.ForeignKey(
+        Availability, on_delete=models.CASCADE, related_name="slots"
+    )
     date = jmodels.jDateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -77,7 +88,9 @@ class Appointment(models.Model):
     customer = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="appointments"
     )
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="appointments")
+    staff = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="appointments"
+    )
     slot = models.ForeignKey(Slot, on_delete=models.PROTECT)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     booking_source = models.CharField(choices=BOOKING_CHOICES, max_length=7)

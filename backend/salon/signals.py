@@ -2,8 +2,8 @@ from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.models import Availability
-from appointment.tasks import generate_slots
+from .models import Availability
+from .tasks import generate_slots
 
 
 @receiver(post_save, sender=Availability)

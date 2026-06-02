@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 
 from celery import shared_task
 
-from core.models import Availability
-from appointment.models import Slot
+from .models import Availability, Slot
 
 
 @shared_task
