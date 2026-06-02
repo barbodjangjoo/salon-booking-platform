@@ -8,7 +8,6 @@ from django.utils.timezone import now
 
 from . import serializers
 from . import models
-from .services.booking import generate_available_slots
 
 
 @api_view(["POST"])
