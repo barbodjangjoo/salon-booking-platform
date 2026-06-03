@@ -31,3 +31,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'email',
+        ]

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.timezone import now
+from rest_framework.permissions import IsAuthenticated
 
 
 from . import serializers
@@ -30,3 +31,17 @@ def user_registration(request):
         status=status.HTTP_201_CREATED,
     )
 
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def user_view(request):
+    user = request.user
+    if request.method == "GET":
+        serializer = serializers.CustomUserSerializer(user)
+        return Response(serializer.data)
+
+    elif request.method == "PATCH":
+        serializer = serializers.CustomUserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
