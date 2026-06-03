@@ -96,3 +96,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'service',
             'booking_source'
         ]
+
+class CreateAppointmentSerializer(serializers.Serializer):
+    slot_id = serializers.IntegerField()
+    service_id = serializers.IntegerField()

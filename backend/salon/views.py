@@ -49,7 +49,7 @@ def appointment_list_view(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes(['GET'])
+@permission_classes([IsAuthenticated])
 def appointment_detail_view(request, pk):
     appointment = get_object_or_404(models.Appointment, pk=pk)
     serializer = serializers.AppointmentSerializer(appointment)
@@ -58,4 +58,17 @@ def appointment_detail_view(request, pk):
 @api_view(['POST', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def appointment_create_view(request):
-    data = 
+    if request.method == 'POST':
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+        slot = get_object_or_404(models.Slot, pk=data.validated_data['slot_id'])
+        service = get_object_or_404(models.Service, pk=data.validated_data['service_id'])
+        appointment = models.Appointment.objects.create(
+            customer = request.user,
+            staff = slot.staff,
+            slot = slot,
+            service = service,
+            booking_source = 'online'
+        )
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data)
