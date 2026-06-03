@@ -49,6 +49,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
 class SlotSerializer(serializers.ModelSerializer):
+    staff = StaffSerializer()
     class Meta:
         model = models.Slot
         fields = [
@@ -59,6 +60,30 @@ class SlotSerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
             'status'
+        ]
+
+class SlotDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Slot
+        fields = [
+            'id',
+            'date',
+            'start_time',
+            'end_time',
+            'status'
+        ]
+
+class StaffWithSlotSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    slot = SlotDetailSerializer(many=True, read_only=True, source='slot_set')
+    class Meta:
+        model = models.Staff
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'slot'
         ]
 
 class AppointmentSerializer(serializers.ModelSerializer):

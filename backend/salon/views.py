@@ -30,5 +30,12 @@ def service_list_view(request, pk):
 
 @api_view(['GET'])
 def staff_list_view(request, pk):
-    pass
+    staff = get_object_or_404(
+        models.Staff.objects.prefetch_related('slot_set'), 
+        pk=pk
+        )
+
+    serializer = serializers.StaffWithSlotSerializer(staff)
+    return Response(serializer.data)
+
 
