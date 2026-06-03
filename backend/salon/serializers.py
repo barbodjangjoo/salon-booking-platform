@@ -87,11 +87,16 @@ class StaffWithSlotSerializer(serializers.ModelSerializer):
         ]
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='staff.user.first_name')
+    last_name = serializers.CharField(source= 'staff.user.last_name')
+    service = serializers.CharField(source= 'service.title')
+    slot = SlotDetailSerializer()
     class Meta:
         model = models.Appointment
         fields = [
             'id',
-            'staff',
+            'first_name',
+            'last_name',
             'slot',
             'service',
             'booking_source'

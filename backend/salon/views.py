@@ -70,5 +70,6 @@ def appointment_create_view(request):
             service = service,
             booking_source = 'online'
         )
+
         serializer = serializers.AppointmentSerializer(appointment)
         return Response(serializer.data)
