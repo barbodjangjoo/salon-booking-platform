@@ -1,5 +1,6 @@
 "use client";
-
+import { useRouter } from "next/navigation";
+import { createAppointment } from "@/lib/api/booking";
 import { use, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -43,13 +44,14 @@ type SlotDay = {
 export default function ServiceDetailPage({
   params,
 }: Props) {
+  const router = useRouter();
+
   const { id } = use(params);
 
   const [service, setService] =
     useState<Service | null>(null);
 
   const [staff, setStaff] = useState<Staff[]>([]);
-
   const [staffId, setStaffId] =
     useState<number | null>(null);
 
@@ -134,6 +136,54 @@ export default function ServiceDetailPage({
     loadSlots();
   }, [staffId, id]);
 
+
+  
+  const [bookingLoading, setBookingLoading] =
+    useState(false);
+    
+    const handleBooking = async () => {
+  try {
+    if (
+      !selectedSlot ||
+      !staffId ||
+      !service
+    )
+      return;
+
+    const accessToken =
+      localStorage.getItem(
+        "access_token"
+      );
+
+    if (!accessToken) {
+      router.push(
+        `/auth?next=/services/${id}`
+      );
+      return;
+    }
+
+    setBookingLoading(true);
+
+    await createAppointment({
+      staff: staffId,
+      service: service.id,
+      date: selectedSlot.date,
+      start_time:
+        selectedSlot.start_time,
+    });
+
+    router.push("/appointments");
+  } catch (error: any) {
+    console.error(error);
+
+    alert(
+      error?.response?.data?.detail ||
+        "خطا در ثبت رزرو"
+    );
+  } finally {
+    setBookingLoading(false);
+  }
+};
   // LOADING
   if (loading) {
     return (
@@ -435,8 +485,14 @@ export default function ServiceDetailPage({
                     </div>
                   </div>
 
-                  <button className="mt-8 rounded-full bg-[#D4B483] px-8 py-4 font-medium text-black transition hover:scale-[1.02]">
-                    ادامه رزرو
+                  <button
+                    onClick={handleBooking}
+                    disabled={bookingLoading}
+                    className="mt-8 rounded-full bg-[#D4B483] px-8 py-4 font-medium text-black transition hover:scale-[1.02] disabled:opacity-50"
+                  >
+                    {bookingLoading
+                      ? "در حال ثبت..."
+                      : "تایید و ثبت رزرو"}
                   </button>
                 </motion.div>
               )}

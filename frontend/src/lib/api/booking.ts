@@ -7,7 +7,7 @@ export const getAvailableSlots = async (
   staffId: number
 ) => {
   const res = await api.get(
-    `/core/services/${serviceId}/slots/?staff=${staffId}`
+    `/core/service/${serviceId}/slots/?staff=${staffId}`
   );
 
   return res.data;
