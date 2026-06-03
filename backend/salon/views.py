@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from . import serializers
@@ -38,4 +39,23 @@ def staff_list_view(request, pk):
     serializer = serializers.StaffWithSlotSerializer(staff)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+    user = request.user
 
+    qs = models.Appointment.objects.filter(customer=user)
+    serializer = serializers.AppointmentSerializer(qs, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes(['GET'])
+def appointment_detail_view(request, pk):
+    appointment = get_object_or_404(models.Appointment, pk=pk)
+    serializer = serializers.AppointmentSerializer(appointment)
+    return Response(serializer.data)
+
+@api_view(['POST', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def appointment_create_view(request):
+    data = 
