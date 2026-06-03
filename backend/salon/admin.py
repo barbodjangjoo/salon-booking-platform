@@ -28,6 +28,7 @@ class StaffAdmin(admin.ModelAdmin):
         'min_gap_between_appointments'
     ]
     search_fields = ['user__first_name', 'user__last_name']
+    list_display_links = ['id', 'user']
 
 @admin.register(models.Availability)
 class AvailabilityAdmin(admin.ModelAdmin):
