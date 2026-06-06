@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from . import serializers
 from . import models
+from salon.models import Appointment
+from salon.serializers import AppointmentSerializer
 
 
 @api_view(["POST"])
@@ -37,8 +39,14 @@ def user_registration(request):
 def user_view(request):
     user = request.user
     if request.method == "GET":
-        serializer = serializers.CustomUserSerializer(user)
-        return Response(serializer.data)
+        user_serializer = serializers.CustomUserSerializer(user)
+        appointments_qs = Appointment.objects.filter(customer=user).all()
+        appointment_serializer = AppointmentSerializer(appointments_qs, many=True)
+        return Response({
+            'user': user_serializer.data,
+            'appointment': appointment_serializer.data
+        })
+
 
     elif request.method == "PATCH":
         serializer = serializers.CustomUserSerializer(user, data=request.data, partial=True)
