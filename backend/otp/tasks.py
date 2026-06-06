@@ -7,6 +7,7 @@ from . import OTP_SETTINGS
 
 logger = logging.getLogger(__name__)
 
+
 @shared_task
 def send_sms_code(phone_number, code):
     headers = {
@@ -22,14 +23,19 @@ def send_sms_code(phone_number, code):
     }
 
     try:
-        response = requests.post('https://api.sms.ir/v1/send/verify',
-                                 json=payload, headers=headers, timeout=10)
+        response = requests.post(
+            "https://api.sms.ir/v1/send/verify",
+            json=payload,
+            headers=headers,
+            timeout=10,
+        )
         data = response.json()
         logger.warning(f"SMS.ir response for {phone_number}: {data}")
         return {"success": data.get("status") == 1, "data": data}
     except Exception as e:
         logger.error(f"SMS sending failed for {phone_number}: {e}")
         return {"success": False, "error": str(e)}
+
 
 def send_otp_to_user(phone_number, purpose="login"):
     phone_number = normalize_phone(phone_number)
