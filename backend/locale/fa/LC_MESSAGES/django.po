@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-07 11:24+0000\n"
+"PO-Revision-Date: 2026-06-07 11:24+0000\n"
+"Last-Translator: Barbod\n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: core/models.py:5
+msgid "first_name"
+msgstr "نام"
+
+#: core/models.py:6
+msgid "last_name"
+msgstr "نام خانوادگی"
+
+#: core/models.py:8
+msgid "phone_number"
+msgstr "شماره تلفن"
+
+#: core/models.py:9
+msgid "email"
+msgstr "ایمیل"
+
+#: core/models.py:11
+msgid "datetime_created"
+msgstr "تاریخ ایجاد"
+
+#: core/models.py:12
+msgid "datetime_modified"
+msgstr "تاریخ آخرین ویرایش"
+
+#: salon/models.py:8 salon/models.py:21
+msgid "title"
+msgstr "عنوان"
+
+#: salon/models.py:19
+msgid "category"
+msgstr "دسته‌بندی"
+
+#: salon/models.py:23
+msgid "duration"
+msgstr "مدت زمان"
+
+#: salon/models.py:23
+msgid "Duration in minutes"
+msgstr "مدت زمان به دقیقه"
+
+#: salon/models.py:25
+msgid "reserve_fee"
+msgstr "مبلغ رزرو"
+
+#: salon/models.py:37
+msgid "user"
+msgstr "کاربر"
+
+#: salon/models.py:40 salon/models.py:123
+msgid "service"
+msgstr "سرویس"
+
+#: salon/models.py:43
+msgid "gap between appointments"
+msgstr "فاصله بین نوبت‌ها"
+
+#: salon/models.py:45
+msgid "Gap between appointments in minutes"
+msgstr "فاصله بین نوبت‌ها به دقیقه"
+
+#: salon/models.py:57 salon/models.py:77 salon/models.py:119
+msgid "staff"
+msgstr "پرسنل"
+
+#: salon/models.py:60 salon/models.py:84
+msgid "date"
+msgstr "تاریخ"
+
+#: salon/models.py:62 salon/models.py:85
+msgid "start time"
+msgstr "زمان شروع"
+
+#: salon/models.py:63 salon/models.py:86
+msgid "end time"
+msgstr "زمان پایان"
+
+#: salon/models.py:65
+msgid "is active"
+msgstr "فعال"
+
+#: salon/models.py:73
+msgid "Available"
+msgstr "در دسترس"
+
+#: salon/models.py:74
+msgid "Reserved"
+msgstr "رزرو شده"
+
+#: salon/models.py:75
+msgid "Blocked"
+msgstr "مسدود شده"
+
+#: salon/models.py:82
+msgid "availability"
+msgstr "دسترسی"
+
+#: salon/models.py:88
+msgid "status"
+msgstr "وضعیت"
+
+#: salon/models.py:104
+msgid "Online"
+msgstr "آنلاین"
+
+#: salon/models.py:105
+msgid "Walk in"
+msgstr "مراجعه حضوری"
+
+#: salon/models.py:106
+msgid "Phone"
+msgstr "تلفنی"
+
+#: salon/models.py:113
+msgid "customer"
+msgstr "مشتری"
+
+#: salon/models.py:121
+msgid "slot"
+msgstr "بازه زمانی"
+
+#: salon/models.py:126
+msgid "booking source"
+msgstr "منبع رزرو"
+
+#: salon/models.py:129
+msgid "datetime created"
+msgstr "تاریخ ایجاد"
+
+#: salon/models.py:130
+msgid "datetime modified"
+msgstr "تاریخ آخرین ویرایش"
