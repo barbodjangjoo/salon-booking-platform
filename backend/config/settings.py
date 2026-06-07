@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'jazzmin',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -183,9 +183,11 @@ SIMPLE_JWT = {
 }
 
 # JAZZMIN SETTING
-# JAZZMIN_SETTINGS = {
-#     'site_title': "Beauty Salon"
-# }
+JAZZMIN_SETTINGS = {
+    'site_title': "Beauty Salon",
+    "site_header": "Beauty Salon",
+
+}
 
 # CORS SETTING
 
@@ -202,3 +204,4 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/2"
 # OTP settings
 OTP_SMS_API_KEY = env('OTP_SMS_API_KEY')
 OTP_SMS_TEMPLATE_ID = env('OTP_SMS_TEMPLATE_ID')
+
