@@ -23,6 +23,7 @@ class Service(models.Model):
         _("duration"), help_text=_("Duration in minutes")
     )
     reserve_fee = models.IntegerField(_("reserve_fee"))
+    total_fee = models.IntegerField(_('total_fee'))
 
     def __str__(self):
         return self.title
