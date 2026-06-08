@@ -196,7 +196,7 @@ SIMPLE_JWT = {
 JAZZMIN_SETTINGS = {
     'site_title': "Beauty Salon",
     "site_header": "Beauty Salon",
-
+    "copyright": "Techra-Teams",
 }
 
 # CORS SETTING
