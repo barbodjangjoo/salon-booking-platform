@@ -9,8 +9,8 @@ class FactorSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'payment_status',
-            'datetime_transaction',
             'total_price',
+            'transaction_datetime',
         ]
 
 class PurchaseItemSerializer(serializers.ModelSerializer):
@@ -18,9 +18,10 @@ class PurchaseItemSerializer(serializers.ModelSerializer):
         model = models.PurchaseItem
         fields = [
             'id',
-            'user',
             'factor',
-            'service',
-            'price',
-            'payment_status'
+            'appointment',
+            'title',
+            'quantity',
+            'unit_price',
+            'total_price'
         ]
