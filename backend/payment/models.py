@@ -33,7 +33,7 @@ class PurchaseItem(models.Model):
     ]
     user= models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     factor = models.ForeignKey(Factor, on_delete=models.CASCADE, related_name='purchase_items')
-    service = models.ForeignKey(Service, on_delete=models.SET_NULL)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
     price = models.IntegerField()
     payment_status = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='pending')
 
