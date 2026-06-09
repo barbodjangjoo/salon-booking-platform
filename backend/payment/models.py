@@ -30,6 +30,7 @@ class Factor(models.Model):
 class PurchaseItem(models.Model):
     factor = models.ForeignKey(Factor, on_delete=models.CASCADE, related_name="items", verbose_name=_("factor"))
     appointment = models.ForeignKey(Appointment, on_delete=models.SET_NULL, blank=True, null=True, related_name="purchase_items", verbose_name=_("appointment"))
+    title = models.CharField(_("title"), max_length=255)
     quantity = models.PositiveIntegerField(_("quantity"), default=1)
     unit_price = models.PositiveIntegerField(_("unit price"))
     total_price = models.PositiveIntegerField(_("total price"))
