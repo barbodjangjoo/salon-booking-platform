@@ -54,56 +54,17 @@ def staff_list_view(request):
     serializer = serializers.StaffSerializer(qs, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def staff_detail_view(request, pk):
 
-# @api_view(["GET"])
-# def service_list_view(request, pk):
-#     service = get_object_or_404(
-#         models.Service.objects.prefetch_related('staff'), 
-#         pk=pk)
-#     print(service)
-#     serializer = serializers.ServiceSerializer(service)
-#     return Response(serializer.data)
+    staff = get_object_or_404(
+        models.Staff.objects
+        .select_related('user')
+        .prefetch_related(
+            'slot_set'
+        ),
+        pk=pk
+    )
 
-# @api_view(['GET'])
-# def staff_list_view(request, pk):
-#     staff = get_object_or_404(
-#         models.Staff.objects.prefetch_related('slot_set'), 
-#         pk=pk
-#         )
-
-#     serializer = serializers.StaffWithSlotSerializer(staff)
-#     return Response(serializer.data)
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def appointment_list_view(request):
-#     user = request.user
-
-#     qs = models.Appointment.objects.filter(customer=user)
-#     serializer = serializers.AppointmentSerializer(qs, many=True)
-#     return Response(serializer.data)
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def appointment_detail_view(request, pk):
-#     appointment = get_object_or_404(models.Appointment, pk=pk)
-#     serializer = serializers.AppointmentSerializer(appointment)
-#     return Response(serializer.data)
-
-# @api_view(['POST', 'PATCH'])
-# @permission_classes([IsAuthenticated])
-# def appointment_create_view(request):
-#     if request.method == 'POST':
-#         data = serializers.CreateAppointmentSerializer(data=request.data)
-#         data.is_valid(raise_exception=True)
-#         slot = get_object_or_404(models.Slot, pk=data.validated_data['slot_id'])
-#         appointment = models.Appointment.objects.create(
-#             customer = request.user,
-#             staff = slot.staff,
-#             slot = slot,
-#             service = slot.staff.service,
-#             booking_source = 'online'
-#         )
-
-#         serializer = serializers.AppointmentSerializer(appointment)
-#         return Response(serializer.data)
+    serializer = serializers.StaffWithSlotSerializer(staff)
+    return Response(serializer.data)

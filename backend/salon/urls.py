@@ -8,7 +8,8 @@ urlpatterns = [
     path("service/", views.service_list_view, name='service_list'),
     path('service/<int:pk>/', views.service_detail_view, name='service_detail'),
     path('staff/', views.staff_list_view, name='staff_list'),
-    
+    path('staff/<int:pk>/', views.staff_detail_view, name='staff_detail'),
+
 
     # path("service/<int:pk>/", views.service_list_view, name="service_list"),
     # path("staff/<int:pk>/slots/", views.staff_list_view, name="staff_slots_list"),
