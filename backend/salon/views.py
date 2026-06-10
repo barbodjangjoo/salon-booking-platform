@@ -46,7 +46,11 @@ def service_detail_view(request, pk):
 @api_view(['GET'])
 def staff_list_view(request):
     
-    qs = models.Staff.objects.prefetch_related('user').all()
+    qs = models.Staff.objects.select_related('user').only(
+        'id',
+        'user__first_name',
+        'user__last_name',
+    ).all()
     serializer = serializers.StaffSerializer(qs, many=True)
     return Response(serializer.data)
 
