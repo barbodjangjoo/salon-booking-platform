@@ -8,7 +8,7 @@ from . import models
 
 @api_view(["GET"])
 def category_list_view(request):
-    qs = models.Category.objects.all()
+    qs = models.Category.objects.prefetch_related('services').all()
     serializer = serializers.CategorySerializer(qs, many=True)
     return Response(serializer.data)
 
@@ -62,12 +62,11 @@ def appointment_create_view(request):
         data = serializers.CreateAppointmentSerializer(data=request.data)
         data.is_valid(raise_exception=True)
         slot = get_object_or_404(models.Slot, pk=data.validated_data['slot_id'])
-        service = get_object_or_404(models.Service, pk=data.validated_data['service_id'])
         appointment = models.Appointment.objects.create(
             customer = request.user,
             staff = slot.staff,
             slot = slot,
-            service = service,
+            service = slot.staff.service,
             booking_source = 'online'
         )
 
