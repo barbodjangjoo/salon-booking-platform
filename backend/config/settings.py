@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'salon',
     'otp',
     'payment',
+    "debug_toolbar"
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -64,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -216,3 +219,7 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/2"
 OTP_SMS_API_KEY = env('OTP_SMS_API_KEY')
 OTP_SMS_TEMPLATE_ID = env('OTP_SMS_TEMPLATE_ID')
 
+# DEBUG toolbar settings
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
