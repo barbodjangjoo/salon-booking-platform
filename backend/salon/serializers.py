@@ -34,7 +34,6 @@ class StaffSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
-            'service'
         ]
 class ServiceSerializer(serializers.ModelSerializer):
     staff = StaffSerializer(many=True, read_only=True)
@@ -104,4 +103,3 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class CreateAppointmentSerializer(serializers.Serializer):
     slot_id = serializers.IntegerField()
-    service_id = serializers.IntegerField()
