@@ -68,3 +68,10 @@ def staff_detail_view(request, pk):
 
     serializer = serializers.StaffWithSlotSerializer(staff)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def availablity_list_view(request):
+
+    qs = models.Availability.objects.all()
+    serializer = serializers.AvailabilitySerializer(qs, many=True)
+    return Response(serializer.data)
