@@ -72,6 +72,20 @@ def staff_detail_view(request, pk):
 @api_view(['GET'])
 def availablity_list_view(request):
 
-    qs = models.Availability.objects.all()
+    qs = models.Availability.objects.select_related(
+        'staff__user'
+        ).all()
     serializer = serializers.AvailabilitySerializer(qs, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def availablity_detail_view(request, pk):
+    
+    available = get_object_or_404(
+        models.Availability.objects.select_related(
+            'staff__user'
+        ),
+        pk=pk
+    )
+    serializer = serializers.AvailabilitySerializer(available)
     return Response(serializer.data)
