@@ -103,3 +103,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class CreateAppointmentSerializer(serializers.Serializer):
     slot_id = serializers.IntegerField()
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Availability
+        fields = [
+            'id',
+            'staff',
+            'date',
+            'start_time',
+            'end_time',
+            'is_active'
+        ]
