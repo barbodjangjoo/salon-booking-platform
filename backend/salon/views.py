@@ -113,3 +113,16 @@ def slot_detail_view(request, pk):
     )
     serializer = serializers.SlotSerializer(slot)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+    
+    qs = models.Appointment.objects.select_related(
+        'customer__user',
+        'staff__user',
+        'slot',
+        'service',
+    ).filter(customer=request.user).all()
+    serializer = serializers.AppointmentSerializer(qs, many=True)
+    return Response(serializer.data)
