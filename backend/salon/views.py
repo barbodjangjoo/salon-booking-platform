@@ -89,3 +89,27 @@ def availablity_detail_view(request, pk):
     )
     serializer = serializers.AvailabilitySerializer(available)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def slot_list_view(request):
+    
+    qs = models.Slot.objects.select_related(
+        'staff__user',
+        'availability'
+    ).all()
+    serializer = serializers.SlotSerializer(qs, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def slot_detail_view(request, pk):
+    
+    slot = get_object_or_404(
+        models.Slot.objects.select_related(
+        'staff__user',
+        'availability'
+    ),
+    pk=pk
+    )
+    serializer = serializers.SlotSerializer(slot)
+    return Response(serializer.data)
