@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 
@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'salon',
     'otp',
     'payment',
-    "debug_toolbar"
 ]
 
 
@@ -66,7 +65,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -219,7 +217,10 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/2"
 OTP_SMS_API_KEY = env('OTP_SMS_API_KEY')
 OTP_SMS_TEMPLATE_ID = env('OTP_SMS_TEMPLATE_ID')
 
-# DEBUG toolbar settings
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+# DJANGO SILK
+if DEBUG:
+    INSTALLED_APPS += ["silk"]
+
+    MIDDLEWARE = [
+        "silk.middleware.SilkyMiddleware",
+    ] + MIDDLEWARE

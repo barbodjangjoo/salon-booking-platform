@@ -16,9 +16,11 @@ django-jalali-date==2.0.0
 django-jazzmin==3.0.4
 django-redis==6.0.0
 django-request==1.7.1
+django-silk==5.5.0
 djangorestframework==3.17.1
 djangorestframework_simplejwt==5.5.1
 environs==15.0.1
+gprof2dot==2025.4.14
 gunicorn==23.0.0
 idna==3.17
 jalali_core==1.0.0
