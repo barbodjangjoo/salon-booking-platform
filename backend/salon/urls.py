@@ -14,7 +14,7 @@ urlpatterns = [
     path('slots/', views.slot_list_view, name='slots_list'),
     path('slots/<int:pk>/', views.slot_detail_view, name='slots_detail'),
     path('appointment/', views.appointment_list_view, name='appointment_list'),
-    
+
 
 
 

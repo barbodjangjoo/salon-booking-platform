@@ -1,8 +1,11 @@
+from django.db import transaction
+from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db.models import Prefetch
+from rest_framework.exceptions import ValidationError
 
 from . import serializers
 from . import models
@@ -113,16 +116,1010 @@ def slot_detail_view(request, pk):
     )
     serializer = serializers.SlotSerializer(slot)
     return Response(serializer.data)
-
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            # چک زمان گذشته
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)@api_view(['GET', 'POST'])
     
-    qs = models.Appointment.objects.select_related(
-        'customer__user',
-        'staff__user',
-        'slot',
-        'service',
-    ).filter(customer=request.user).all()
-    serializer = serializers.AppointmentSerializer(qs, many=True)
-    return Response(serializer.data)
+
+@permission_classes([IsAuthenticated])
+def appointment_list_view(request):
+
+    if request.method == 'GET':
+        qs = (
+            models.Appointment.objects
+            .select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            )
+            .filter(customer=request.user)
+        )
+
+        serializer = serializers.AppointmentSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        data = serializers.CreateAppointmentSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+
+        with Transaction.atomic():
+
+            slot = get_object_or_404(
+                models.Slot.objects.select_for_update(),
+                pk=data.validated_data['slot_id']
+            )
+
+            service = get_object_or_404(
+                models.Service,
+                pk=data.validated_data['service_id']
+            )
+
+            if slot.status != 'available':
+                raise ValidationError(
+                    {'slot': 'This slot is not available.'}
+                )
+
+            if not slot.staff.service.filter(pk=service.pk).exists():
+                raise ValidationError(
+                    {'service': 'This staff does not provide this service.'}
+                )
+
+            today = timezone.localdate()
+            now_time = timezone.localtime().time()
+
+            if slot.date == today and slot.start_time <= now_time:
+                raise ValidationError(
+                    {'slot': 'This slot time has already passed.'}
+                )
+
+            appointment = models.Appointment.objects.create(
+                customer=request.user,
+                staff=slot.staff,
+                slot=slot,
+                service=service,
+                booking_source='online'
+            )
+
+            slot.status = 'reserved'
+            slot.save(update_fields=['status'])
+
+        serializer = serializers.AppointmentSerializer(appointment)
+        return Response(serializer.data, status=201)

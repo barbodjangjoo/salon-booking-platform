@@ -103,6 +103,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class CreateAppointmentSerializer(serializers.Serializer):
     slot_id = serializers.IntegerField()
+    service_id = serializers.IntegerField()
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     staff = StaffSerializer()
