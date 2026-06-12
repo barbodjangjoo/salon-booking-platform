@@ -6,6 +6,7 @@ from django.db import transaction
 
 from . import models
 from . import serializers
+from salon import models as salon_models
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -60,7 +61,7 @@ def factor_list_view(request):
 @permission_classes([IsAuthenticated])
 def factor_detail_view(request, pk):
     factor = get_object_or_404(
-        models.Factor.objects.prefetch_related('factors'),
+        models.Factor.objects.prefetch_related('items'),
         pk=pk
         )
     serializer = serializers.FactorSerializer(factor)
