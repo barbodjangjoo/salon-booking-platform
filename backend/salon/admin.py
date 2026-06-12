@@ -55,6 +55,7 @@ class AvailabilityAdmin(admin.ModelAdmin):
 class SlotAdmin(admin.ModelAdmin):
     resource_class = models.Slot
     list_display = (
+        'id',
         "staff",
         "date",
         "start_time",
