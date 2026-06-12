@@ -16,7 +16,7 @@ class PurchaseItemSerializer(serializers.ModelSerializer):
         ]
 
 class FactorSerializer(serializers.ModelSerializer):
-    items = PurchaseItemSerializer()
+    items = PurchaseItemSerializer(many=True, read_only=True)
     class Meta:
         model = models.Factor
         fields =[
