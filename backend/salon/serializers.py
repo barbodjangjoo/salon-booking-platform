@@ -21,6 +21,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
+            'svg',
             'services'
         ]
 
