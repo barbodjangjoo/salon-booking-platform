@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 
 class Category(models.Model):
     title = models.CharField(_("title"), max_length=255)
+    svg = models.FileField(upload_to='svg/', blank=True, null=True)
 
     def __str__(self):
         return self.title
