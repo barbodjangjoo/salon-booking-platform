@@ -6,6 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db.models import Prefetch
 from rest_framework.exceptions import ValidationError
+import jdatetime
+from django.db.models import Q
 
 from . import serializers
 from . import models
@@ -95,30 +97,41 @@ def availablity_detail_view(request, pk):
 
 
 @api_view(['GET'])
-def slot_list_view(request):
+def slot_list_view(request, pk):
+
+    today = jdatetime.date.today()
+    current_time = timezone.localtime().time()
     
     qs = models.Slot.objects.select_related(
         'staff__user',
         'availability'
+    ).filter(staff_id=pk).filter(
+        Q(date__gt=today) |
+        Q(date=today, start_time__gt = current_time )
     ).all()
+
     serializer = serializers.SlotSerializer(qs, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def slot_detail_view(request, pk):
     
+    today = jdatetime.date.today()
+    
     slot = get_object_or_404(
         models.Slot.objects.select_related(
         'staff__user',
         'availability'
-    ),
+    ).filter(date__gt=today),
     pk=pk
     )
     serializer = serializers.SlotSerializer(slot)
     return Response(serializer.data)
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def appointment_list_view(request):
+
 
     if request.method == 'GET':
         qs = (
