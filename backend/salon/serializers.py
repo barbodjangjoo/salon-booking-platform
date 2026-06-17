@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from datetime import datetime
+from django.utils import timezone
 
 from . import models
 
@@ -50,6 +52,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class SlotSerializer(serializers.ModelSerializer):
     staff = StaffSerializer()
+    status = serializers.SerializerMethodField()
     class Meta:
         model = models.Slot
         fields = [
@@ -61,6 +64,20 @@ class SlotSerializer(serializers.ModelSerializer):
             'end_time',
             'status'
         ]
+
+    def get_status(self, obj):
+        slot_datetime = timezone.make_aware(
+            datetime.combine(
+                obj.date.togregorian(),
+                obj.start_time
+            )
+        )
+
+        if slot_datetime <= timezone.now():
+            return 'unavailable'
+
+        return obj.status
+
 
 class SlotDetailSerializer(serializers.ModelSerializer):
     class Meta:
