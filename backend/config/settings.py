@@ -225,3 +225,7 @@ if DEBUG:
     MIDDLEWARE = [
         "silk.middleware.SilkyMiddleware",
     ] + MIDDLEWARE
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://pedometer-embody-mystified.ngrok-free.dev",
+]
