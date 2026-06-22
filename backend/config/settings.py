@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     "rest_framework",
     'rest_framework_simplejwt',
     "django_jalali",
@@ -203,11 +204,11 @@ JAZZMIN_SETTINGS = {
 
 # CORS SETTING
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-# ]
-# CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://pedometer-embody-mystified.ngrok-free.dev",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # Celery settings
 REDIS_URL='redis://localhost:6379/0'
