@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 
 class CustomUser(AbstractUser):
+    
     username = None
 
     first_name = models.CharField(_('first_name'),max_length=255)
@@ -15,7 +16,7 @@ class CustomUser(AbstractUser):
     datetime_modified = models.DateTimeField(_('datetime_modified'),auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['first_name', 'last_name',]
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
