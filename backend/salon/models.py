@@ -23,6 +23,7 @@ class Service(models.Model):
     duration = models.PositiveIntegerField(
         _("duration"), help_text=_("Duration in minutes")
     )
+    svg = models.FileField(upload_to='svg/', blank=True, null=True)
     reserve_fee = models.IntegerField(_("reserve_fee"))
 
     def __str__(self):
