@@ -12,6 +12,7 @@ class ServiceListSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
+            'svg',
             'duration',
             'reserve_fee',
         ]
