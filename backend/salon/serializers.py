@@ -38,6 +38,7 @@ class StaffSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
+            'image',
         ]
 class ServiceSerializer(serializers.ModelSerializer):
     staff = StaffSerializer(many=True, read_only=True)
@@ -101,6 +102,7 @@ class StaffWithSlotSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
+            'image',
             'slots'
         ]
 
