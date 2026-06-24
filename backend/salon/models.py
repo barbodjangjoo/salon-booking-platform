@@ -38,6 +38,7 @@ class Staff(models.Model):
         null=True,
         verbose_name=_("user"),
     )
+    image = models.ImageField(upload_to='staff_image/', blank=True, null=True)
     service = models.ManyToManyField(
         Service, related_name="staff", verbose_name=_("service")
     )
