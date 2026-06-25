@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', 'pedometer-embody-mystifie
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -196,11 +196,11 @@ SIMPLE_JWT = {
 }
 
 # JAZZMIN SETTING
-JAZZMIN_SETTINGS = {
-    'site_title': "Beauty Salon",
-    "site_header": "Beauty Salon",
-    "copyright": "Techra-Teams",
-}
+# JAZZMIN_SETTINGS = {
+#     'site_title': "Beauty Salon",
+#     "site_header": "Beauty Salon",
+#     "copyright": "Techra-Teams",
+# }
 
 # CORS SETTING
 
