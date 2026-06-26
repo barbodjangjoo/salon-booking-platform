@@ -175,7 +175,6 @@ def appointment_list_view(request):
                     {'service': 'This staff does not provide this service.'}
                 )
 
-            # چک زمان گذشته
             today = timezone.localdate()
             now_time = timezone.localtime().time()
 
@@ -197,4 +196,20 @@ def appointment_list_view(request):
 
         serializer = serializers.AppointmentSerializer(appointment)
         return Response(serializer.data, status=201)
- 
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def appointment_detail_view(request, pk):
+    appointment = get_object_or_404(
+        models.Appointment.objects.select_related(
+                'customer',
+                'staff__user',
+                'slot',
+                'service',
+            ),
+            pk=pk
+    )
+    serializer = serializers.AppointmentDetailSerializer(appointment)
+    return Response(serializer.data)
+

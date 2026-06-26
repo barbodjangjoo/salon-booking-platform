@@ -122,6 +122,26 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'booking_source'
         ]
 
+class AppointmentDetailSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='staff.user.first_name')
+    last_name = serializers.CharField(source= 'staff.user.last_name')
+    service = serializers.CharField(source= 'service.title')
+    reserve_fee = serializers.CharField(source='service.reserve_fee')
+    duration = serializers.CharField(source='service.duration')
+    slot = SlotDetailSerializer()
+    class Meta:
+        model = models.Appointment
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'slot',
+            'service',
+            'reserve_fee',
+            'duration',
+            'booking_source',
+        ]
+
 class CreateAppointmentSerializer(serializers.Serializer):
     slot_id = serializers.IntegerField()
     service_id = serializers.IntegerField()
