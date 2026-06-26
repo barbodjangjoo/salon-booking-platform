@@ -8,6 +8,10 @@ class Category(models.Model):
     title = models.CharField(_("title"), max_length=255)
     svg = models.FileField(upload_to='svg/', blank=True, null=True)
 
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
     def __str__(self):
         return self.title
 
@@ -26,9 +30,14 @@ class Service(models.Model):
     svg = models.FileField(upload_to='svg/', blank=True, null=True)
     reserve_fee = models.IntegerField(_("reserve_fee"))
 
+    class Meta:
+        verbose_name = _('Service')
+        verbose_name_plural = _('Services')
+
     def __str__(self):
         return self.title
 
+    
 
 class Staff(models.Model):
     user = models.ForeignKey(
@@ -38,7 +47,7 @@ class Staff(models.Model):
         null=True,
         verbose_name=_("user"),
     )
-    image = models.ImageField(upload_to='staff_image/', blank=True, null=True)
+    image = models.ImageField(_('image'), upload_to='staff_image/', blank=True, null=True)
     service = models.ManyToManyField(
         Service, related_name="staff", verbose_name=_("service")
     )
@@ -47,6 +56,10 @@ class Staff(models.Model):
         default=0,
         help_text=_("Gap between appointments in minutes"),
     )
+
+    class Meta:
+        verbose_name = _('Staff')
+        verbose_name_plural = _('Staffs')
 
     def __str__(self):
         return f"{self.user.first_name} - {self.user.last_name}"
@@ -66,6 +79,10 @@ class Availability(models.Model):
     end_time = models.TimeField(_("end time"))
 
     is_active = models.BooleanField(_("is active"), default=True)
+
+    class Meta:
+        verbose_name = _('Availability')
+        verbose_name_plural = _('Availabilities')
 
     def __str__(self):
         return f"{self.staff} - {self.date}"
@@ -95,12 +112,13 @@ class Slot(models.Model):
         return f"{self.staff} Time: {self.start_time}"
 
     class Meta:
+        verbose_name = _('Time slot')
+        verbose_name_plural = _('Time slots')
         constraints = [
             models.UniqueConstraint(
                 fields=["staff", "date", "start_time"], name="unique_slot_per_staff"
             )
         ]
-
 
 class Appointment(models.Model):
     BOOKING_CHOICES = (
@@ -131,6 +149,10 @@ class Appointment(models.Model):
 
     datetime_created = models.DateTimeField(_("datetime created"), auto_now_add=True)
     datetime_modified = models.DateTimeField(_("datetime modified"), auto_now=True)
+
+    class Meta:
+        verbose_name = _('Appointment')
+        verbose_name_plural = _('Appointments')
 
     def __str__(self):
         return f"{self.customer} - {self.service}"
