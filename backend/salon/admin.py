@@ -1,4 +1,5 @@
 from django.contrib import admin
+import jdatetime
 
 from . import models
 @admin.register(models.Category)
@@ -30,6 +31,16 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ['user__first_name', 'user__last_name']
     list_display_links = ['id', 'user']
 
+    def get_queryset(self, request):
+        qs =  super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+        
+        staff = models.Staff.objects.filter(user=request.user).get()
+        return qs.filter(
+            staff=staff
+        )
 @admin.register(models.Availability)
 class AvailabilityAdmin(admin.ModelAdmin):
     resource_class = models.Availability
@@ -51,8 +62,20 @@ class AvailabilityAdmin(admin.ModelAdmin):
         'staff__user__first_name'
     ]
 
+    def get_queryset(self, request):
+        qs =  super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+        
+        staff = models.Staff.objects.filter(user=request.user).get()
+        return qs.filter(
+            staff=staff
+        )
+
 @admin.register(models.Slot)
 class SlotAdmin(admin.ModelAdmin):
+    date_hierarchy = 'date'
     resource_class = models.Slot
     list_display = (
         'id',
@@ -62,6 +85,19 @@ class SlotAdmin(admin.ModelAdmin):
         "end_time",
         "status",
     )
+    list_filter =  ['staff', 'status', 'date',]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+
+        staff = models.Staff.objects.filter(user=request.user).get()
+        return qs.filter(
+            staff = staff
+        )
+
 
 @admin.register(models.Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
@@ -72,3 +108,14 @@ class AppointmentAdmin(admin.ModelAdmin):
         'booking_source',
     ]
     autocomplete_fields = ['customer', 'staff']
+
+    def get_queryset(self, request):
+        qs =  super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+        
+        staff = models.Staff.objects.filter(user=request.user).get()
+        return qs.filter(
+            staff=staff
+        )
