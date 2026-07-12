@@ -15,3 +15,10 @@ app.config_from_object(
 )
 
 app.autodiscover_tasks()
+
+app.conf.beat_schedule = {
+    "block-expired-slots": {
+        "task": "salon.tasks.block_expired_slots",
+        "schedule": 300,  # هر ۵ دقیقه
+    },
+}
