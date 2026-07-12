@@ -1,7 +1,7 @@
-# appointment/tasks.py
-
 from datetime import datetime, timedelta
-
+from django.utils import timezone
+from django.db.models import Q
+import jdatetime
 from celery import shared_task
 
 from .models import Availability, Slot
@@ -63,3 +63,29 @@ def generate_slots(availability_id):
         current_datetime += timedelta(
             minutes=duration + gap
         )
+
+
+
+@shared_task
+def block_expired_slots():
+    
+    now = timezone.localtime()
+
+    today = jdatetime.date.today()
+    current_time = now.time()
+
+    expired_slots = Slot.objects.filter(
+        status="available"
+    ).filter(
+        Q(date__lt=today) |
+        Q(
+            date=today,
+            end_time__lt=current_time
+        )
+    )
+
+    updated_count = expired_slots.update(
+        status="blocked"
+    )
+
+    return f"{updated_count} slots blocked"
